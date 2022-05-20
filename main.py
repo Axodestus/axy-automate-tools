@@ -1,7 +1,7 @@
 from enum import Enum
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPalette
-from PyQt5.QtWidgets import QApplication, QPushButton, QWidget, QLineEdit, QVBoxLayout, QPlainTextEdit
+from PyQt5.QtWidgets import *
 
 
 class TokenType(Enum):
@@ -14,9 +14,11 @@ class TokenType(Enum):
 
 
 class Token:
+
     def __init__(self, token_type, source):
         self.token_type = token_type
         self.source = source
+
 
 class Lexer:
     DICTIONARY = {
@@ -29,8 +31,9 @@ class Lexer:
 
     def __init__(self, source):
         self.tokens = []
-        self.source = "5 + 5"  # for debug
+        self.source = source  # for debug
         self.pos = 0
+
 
     def tokenize(self):
         while self.pos < len(self.source):
@@ -44,6 +47,7 @@ class Lexer:
 
         return self.tokens
 
+
     def tokenize_operator(self):
         current_char = self.peek(0)
         token_type = self.DICTIONARY[current_char]
@@ -51,6 +55,7 @@ class Lexer:
         token = Token(token_type, current_char)
         self.tokens.append(token)
         self.next()
+
 
     def tokenize_number(self):
         buffer = ""
@@ -75,31 +80,26 @@ class Lexer:
         return self.peek(self.pos)
 
 
-class Expression:
-    def __init__(self):
-        self.value = None # Number
 
-    def evaluate(self):
-        pass
-
-
-class BinaryExpression(Expression):
+class BinaryExpression:
     def __init__(self, operation, expression1, expression2):
         self.operation = operation
         self.expression1 = expression1
         self.expression2 = expression2
+
 
     def evaluate(self):
         if self.operation == TokenType.ADD:
             return self.expression1.evaluate() + self.expression2.evaluate()
 
 
-class NumberExpression(Expression):
-    def __init__(self, expression):
-        self.expression = expression
+class NumberExpression:
+    def __init__(self, value):
+        self.value = value
+
 
     def evaluate(self):
-        return self.expression.value
+        return self.value
 
 
 class Parser:
@@ -107,31 +107,60 @@ class Parser:
         self.tokens = tokens
         self.pos = 0
 
+
     def expression(self):
         return self.add()
 
+
     def add(self):
-        return self.mul()
+        expr = self.primary()
+
+        while True:
+            if self.match(TokenType.ADD):
+                expr = BinaryExpression(TokenType.ADD, expr, self.primary())
+                continue
+            if self.match(TokenType.SUB):
+                expr = BinaryExpression(TokenType.SUB, expr, self.primary())
+                continue
+            break
+
+        return expr
+
 
     def mul(self):
-        return self.primary()
+        expr = self.primary()
+
+        while True:
+            if self.match(TokenType.MUL):
+                expr = BinaryExpression(TokenType.MUL, expr, self.primary())
+                continue
+            if self.match(TokenType.DIV):
+                expr = BinaryExpression(TokenType.DIV, expr, self.primary())
+                continue
+            break
+
+        return expr
+
 
     def primary(self):
-        pass
+        symbol = self.peek(0).source
+
+        if self.match(TokenType.NUMBER):
+            return NumberExpression(float(symbol))
+
 
     def match(self, token_type):
-        current_token = self.peek(0)
-
-        if current_token.type == token_type:
+        if self.peek(0).token_type is token_type:
             self.pos = self.pos + 1
             return True
         return False
 
+
     def peek(self, relative_position):
         position = self.pos + relative_position
-        if position > len(self.tokens):
-            return TokenType.EOF
-        return self.tokens[self.pos]
+        if position >= len(self.tokens):
+            return Token(TokenType.EOF, "\0")
+        return self.tokens[position]
 
 
 def main():
@@ -142,32 +171,33 @@ def main():
         print(i.token_type)
         print(i.source)
 
-    print(TokenType.NUMBER.value)
+    parser = Parser(lexer.tokenize())
+    print(parser.add().evaluate())
 
     # UI Experimental
-    app = QApplication([])
-    window = QWidget()
+    # app = QApplication([])
+    # window = QWidget()
+    #
+    # line_edit = QPlainTextEdit("hello world")
+    # line_edit.setFixedHeight(150)
+    # line_edit2 = QPlainTextEdit("fooo")
+    # line_edit2.setFixedHeight(150)
+    # button1 = QPushButton("Click")
+    # button1.clicked.connect(lambda: button_clicked(lexer, line_edit))
+    #
+    # layout = QVBoxLayout()
+    # layout.addWidget(line_edit)
+    # layout.addWidget(line_edit2)
+    # layout.addWidget(button1)
+    #
+    # window.setLayout(layout)
+    # window.setBaseSize(200, 200)
+    # window.show()
+    # app.exec()
 
-    line_edit = QPlainTextEdit("hello world")
-    line_edit.setFixedHeight(150)
-    line_edit2 = QPlainTextEdit("fooo")
-    line_edit2.setFixedHeight(150)
-    button1 = QPushButton("Click")
-    button1.clicked.connect(lambda: button_clicked(lexer, line_edit))
-
-    layout = QVBoxLayout()
-    layout.addWidget(line_edit)
-    layout.addWidget(line_edit2)
-    layout.addWidget(button1)
-
-    window.setLayout(layout)
-    window.setBaseSize(200, 200)
-    window.show()
-    app.exec()
-
-def button_clicked(lexer, line_edit):
-    for i in lexer.tokenize():
-        line_edit.appendPlainText(i.source)
+# def button_clicked(lexer, line_edit):
+#     for i in lexer.tokenize():
+#         line_edit.appendPlainText(i.source)
 
 
 
