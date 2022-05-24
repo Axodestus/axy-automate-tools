@@ -34,7 +34,6 @@ class Lexer:
         self.source = source  # for debug
         self.pos = 0
 
-
     def tokenize(self):
         while self.pos < len(self.source):
             current_char = self.peek(0)
@@ -44,18 +43,14 @@ class Lexer:
                 self.tokenize_operator()
             else:
                 self.pos = self.pos + 1
-
         return self.tokens
-
 
     def tokenize_operator(self):
         current_char = self.peek(0)
         token_type = self.DICTIONARY[current_char]
-
         token = Token(token_type, current_char)
         self.tokens.append(token)
         self.next()
-
 
     def tokenize_number(self):
         buffer = ""
@@ -63,10 +58,8 @@ class Lexer:
         while current_char.isdigit():
             buffer = buffer + current_char
             current_char = self.next()
-
         token = Token(TokenType.NUMBER, buffer)
         self.tokens.append(token)
-
 
     def peek(self, relative_position):
         position = self.pos + relative_position
@@ -74,11 +67,9 @@ class Lexer:
             return "\0"
         return self.source[self.pos]
 
-
     def next(self):
         self.pos = self.pos + 1
         return self.peek(self.pos)
-
 
 
 class BinaryExpression:
@@ -86,7 +77,6 @@ class BinaryExpression:
         self.operation = operation
         self.expression1 = expression1
         self.expression2 = expression2
-
 
     def evaluate(self):
         if self.operation == TokenType.ADD:
@@ -97,7 +87,6 @@ class NumberExpression:
     def __init__(self, value):
         self.value = value
 
-
     def evaluate(self):
         return self.value
 
@@ -107,14 +96,11 @@ class Parser:
         self.tokens = tokens
         self.pos = 0
 
-
     def expression(self):
         return self.add()
 
-
     def add(self):
         expr = self.primary()
-
         while True:
             if self.match(TokenType.ADD):
                 expr = BinaryExpression(TokenType.ADD, expr, self.primary())
@@ -123,13 +109,10 @@ class Parser:
                 expr = BinaryExpression(TokenType.SUB, expr, self.primary())
                 continue
             break
-
         return expr
-
 
     def mul(self):
         expr = self.primary()
-
         while True:
             if self.match(TokenType.MUL):
                 expr = BinaryExpression(TokenType.MUL, expr, self.primary())
@@ -138,23 +121,18 @@ class Parser:
                 expr = BinaryExpression(TokenType.DIV, expr, self.primary())
                 continue
             break
-
         return expr
-
 
     def primary(self):
         symbol = self.peek(0).source
-
         if self.match(TokenType.NUMBER):
             return NumberExpression(float(symbol))
-
 
     def match(self, token_type):
         if self.peek(0).token_type is token_type:
             self.pos = self.pos + 1
             return True
         return False
-
 
     def peek(self, relative_position):
         position = self.pos + relative_position
@@ -165,14 +143,12 @@ class Parser:
 
 def main():
     source = "5 + 5"
-
     lexer = Lexer(source)
     for i in lexer.tokenize():
         print(i.token_type)
         print(i.source)
-
     parser = Parser(lexer.tokenize())
-    print(parser.add().evaluate())
+    print(parser.expression().evaluate())
 
     # UI Experimental
     # app = QApplication([])
@@ -195,10 +171,10 @@ def main():
     # window.show()
     # app.exec()
 
+
 # def button_clicked(lexer, line_edit):
 #     for i in lexer.tokenize():
 #         line_edit.appendPlainText(i.source)
-
 
 
 if __name__ == '__main__':
