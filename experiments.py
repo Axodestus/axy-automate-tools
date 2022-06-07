@@ -5,7 +5,12 @@ import time
 from collections import deque
 
 
-
+graph = {}
+graph["you"] = ["Alice", "Bob", "Claire", "max"]
+graph["Alice"] = []
+graph["Bob"] = []
+graph["Claire"] = []
+graph["max"] = []
 
 
 # I should create some graph via python dicts
@@ -18,7 +23,7 @@ def search_in_width(name):
         person = search_queue.popleft()
 
         if person[0] == "m":        # This is bad example to the find person
-            if person not in searched:
+            if not person in searched:
                 print(person + " [Debug] person is a mango seller")
                 return True
             else:
@@ -93,6 +98,9 @@ def main():
     print("[Debug] Quick_sort")
     data = [random.randint(1, 100) for x in range(1, 100)]
     print(quick_sort(data))
+
+    print("[Debug] Search_in_width")
+    print(search_in_width("you"))
 
 
 if __name__ == '__main__':
