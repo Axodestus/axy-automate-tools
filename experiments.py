@@ -2,7 +2,29 @@ import random
 import sys
 import os
 import time
+from collections import deque
 
+
+
+
+
+# I should create some graph via python dicts
+def search_in_width(name):
+    search_queue = deque()
+    search_queue += graph[name]
+    searched = []
+
+    while search_queue:
+        person = search_queue.popleft()
+
+        if person[0] == "m":        # This is bad example to the find person
+            if person not in searched:
+                print(person + " [Debug] person is a mango seller")
+                return True
+            else:
+                search_queue += graph[person]
+                search_queue.append(person)
+    return False
 
 
 
