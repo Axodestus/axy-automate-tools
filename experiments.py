@@ -4,17 +4,20 @@ import os
 import time
 from collections import deque
 
-
-graph = {}
-graph["you"] = ["Alice", "Bob", "Claire", "max"]
-graph["Alice"] = []
-graph["Bob"] = []
-graph["Claire"] = []
-graph["max"] = []
+def d_algo():
+    pass
 
 
-# I should create some graph via python dicts
-def search_in_width(name):
+def search_in_width(name): 
+
+    # some simple data: graph
+    graph = {}
+    graph["you"] = ["Alice", "Bob", "Claire", "max"]
+    graph["Alice"] = []
+    graph["Bob"] = []
+    graph["Claire"] = []
+    graph["max"] = []
+
     search_queue = deque()
     search_queue += graph[name]
     searched = []
@@ -32,7 +35,7 @@ def search_in_width(name):
     return False
 
 
-
+# This is basic simple algo for figure out recursion
 def factorial(value):
     if value == 1:
         return 1
@@ -50,7 +53,7 @@ def quick_sort(data):
         return quick_sort(less) + [pivot] + quick_sort(greater)
 
 
-# there is function for selection sort.
+# There is function for selection sort.
 def find_smallest(data):
     smallest = data[0]
     smallest_index = 0
