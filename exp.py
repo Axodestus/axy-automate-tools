@@ -1,14 +1,12 @@
 import random
-import sys
-import os
-import time
 from collections import deque
+
 
 def d_algo():
     pass
 
 
-def search_in_width(name): 
+def search_in_width(name):
 
     # some simple data: graph
     graph = {}
@@ -26,8 +24,8 @@ def search_in_width(name):
         person = search_queue.popleft()
 
         if person[0] == "m":        # This is bad example to the find person
-            if not person in searched:
-                print(person + " [Debug] person is a mango seller")
+            if person not in searched:
+                print(person + " [Debug]: person is a mango seller")
                 return True
             else:
                 search_queue += graph[person]
@@ -39,7 +37,7 @@ def search_in_width(name):
 def factorial(value):
     if value == 1:
         return 1
-    return value * fact(x - 1)
+    return value * factorial(value - 1)
 
 
 def quick_sort(data):
@@ -57,7 +55,7 @@ def quick_sort(data):
 def find_smallest(data):
     smallest = data[0]
     smallest_index = 0
-    for i in range(1, len(data)): 
+    for i in range(1, len(data)):
         if data[i] < smallest:
             smallest = data[i]
             smallest_index = i
@@ -78,7 +76,7 @@ def binary_search(value):
     first = 0
     last = len(data) - 1
     while first <= last:
-        middle = first + last // 2 - 1 # this is main idea of binary search... 
+        middle = first + last // 2 - 1  # this is main idea of binary search...
         guess = data[middle]
         if guess == value:
             return middle
@@ -92,17 +90,14 @@ def binary_search(value):
 def main():
     print("This is experiments with some algo")
     data = [random.randint(1, 100) for x in range(1, 100)]
-        
+
     print(binary_search(5))
 
-    print("[Debug] Selection_sort")
-    print(selection_sort(data))
-
-    print("[Debug] Quick_sort")
+    print("[Debug]: Quick_sort")
     data = [random.randint(1, 100) for x in range(1, 100)]
     print(quick_sort(data))
 
-    print("[Debug] Search_in_width")
+    print("[Debug]: Search_in_width")
     print(search_in_width("you"))
 
 

@@ -1,6 +1,3 @@
-set nocompatible              " be iMproved, required
-filetype off                  " required
-
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
@@ -21,19 +18,25 @@ filetype plugin indent on    " required
 
 syntax on
 
-set number
 let g:ycm_global_ycm_extra_conf = '/home/alex/ycm_extra_conf.py'
 let g:ycm_confirm_extra_conf = 1
 set completeopt-=preview
 let g:ycm_global_ycm_extra_conf = "~/.ycm_extra_conf.py"
 let g:airline#extensions#tabline#enabled = 1
+
 colorscheme darcula
 
+# Customize
+set number
+set nocompatible
+set hlsearch
 set tabstop=4
 set shiftwidth=4
 set smarttab
 set expandtab
 set smartindent
+
+# mapping 
 imap jj <Esc>
 map <C-n> :NERDTreeToggle<CR>
 let g:VimTodoListsUndoneItem = '- [X]'
