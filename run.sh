@@ -2,4 +2,4 @@
 
 set -xe
 
-python3 experiments.py
+python3 exp.py
