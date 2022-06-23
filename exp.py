@@ -23,7 +23,7 @@ def search_in_width(name):
     while search_queue:
         person = search_queue.popleft()
 
-        if person[0] == "m":        # This is bad example to the find person
+        if person[0] == "m":        # This is bad example to be find person
             if person not in searched:
                 print(person + " [Debug]: person is a mango seller")
                 return True
