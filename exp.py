@@ -1,7 +1,6 @@
 import random
 from collections import deque
 
-
 def d_algo():
     pass
 
